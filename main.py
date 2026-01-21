@@ -24,8 +24,11 @@ parser.add_argument('--mode', default='coattn', type=str, choices=['omic', 'path
 parser.add_argument('--split_dir',       type=str, default='/vip_media/sicheng/DataShare/tmi_re/ours/splits/5foldcv',
                     help='Which cancer type within ./splits/<which_splits> to use for training. Used synonymously for "task" (Default: tcga_blca)')
 
-parser.add_argument('--data_root_dir',   type=str, default=f'/vip_media/sicheng/DataShare/tmi_re/UNI_results/UNI_{dataset_name}/pt_files',
+# parser.add_argument('--data_root_dir',   type=str, default=f'/vip_media/sicheng/DataShare/tmi_re/UNI_results/UNI_{dataset_name}/pt_files',
+#                     help='Data directory to WSI features')
+parser.add_argument('--data_root_dir',   type=str, default=f'/home/sicheng/yscwork/path_se_ans/{dataset_name}_SE',
                     help='Data directory to WSI features')
+
 parser.add_argument('--seed', 			 type=int, default=1,
                     help='Random seed for reproducible experiment (default: 1)')
 parser.add_argument('--k', 			     type=int, default=5,

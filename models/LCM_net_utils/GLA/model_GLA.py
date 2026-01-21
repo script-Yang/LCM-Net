@@ -24,7 +24,6 @@ def init_non_llm(m: nn.Module):
             if m.out_proj.bias is not None:
                 nn.init.zeros_(m.out_proj.bias)
 
-
 class TransformerBlock(nn.Module):
     def __init__(self, dim, nhead=8, mlp_ratio=4.0, p_drop=0.1):
         super().__init__()
@@ -50,34 +49,95 @@ class TransformerBlock(nn.Module):
         x = x + h
         return x
 
-
 class RegisterSNN(nn.Module):
-    def __init__(self, omic_input_dim: int, model_size_omic="small", k_register: int = 8):
+    def __init__(
+        self,
+        omic_input_dim: int,          # G
+        model_size_omic: str = "small",
+        k_register: int = 8,
+        nhead: int = 2,
+        dropout: float = 0.1,
+    ):
         super().__init__()
         self.k_register = k_register
-        self.register = nn.Parameter(torch.randn(1, k_register))
-        dim_dict = {"small": 4096}
+        dim_dict = {"small": 256}
         self.base_dim = dim_dict[model_size_omic]
-        self.in_dim = omic_input_dim + k_register
-        self.hid_dim = self.base_dim + k_register
 
-        blocks = [SNN_Block(self.in_dim, self.hid_dim)]
-        for _ in range(3):
-            blocks.append(SNN_Block(self.hid_dim, self.hid_dim, dropout=0.25))
+        blocks = [SNN_Block(omic_input_dim, self.base_dim)]
+        for _ in range(1):
+            blocks.append(SNN_Block(self.base_dim, self.base_dim, dropout=0.25))
         self.fc_omic = nn.Sequential(*blocks)
+        self.gene_proj = nn.Linear(1, self.base_dim)
+
+        self.register = nn.Parameter(torch.randn(1, k_register, self.base_dim) * 0.02)
+
+        self.ln = nn.LayerNorm(self.base_dim)
+        self.attn = nn.MultiheadAttention(
+            embed_dim=self.base_dim,
+            num_heads=nhead,
+            dropout=dropout,
+            batch_first=True,
+        )
 
         self.apply(init_non_llm)
-        nn.init.normal_(self.register, 0.0, 0.02)
 
-    def forward(self, x):
-        # x: (B,G)
+    def forward(self, x, return_heatmap: bool = False):
+        # need_w = return_heatmap
         if x.dim() == 1:
             x = x.unsqueeze(0)
-        B = x.size(0)
-        r = self.register.expand(B, -1)      # (B,k)
-        x = torch.cat([x, r], dim=1)          # (B,G+k)
-        h = self.fc_omic(x)                   # (B,base+k)
-        return h[:, :-self.k_register]        # (B,base)
+        B, G = x.shape
+        h_global = self.fc_omic(x)                            
+        gene_tokens = self.gene_proj(x.unsqueeze(-1))         
+        gene_tokens = gene_tokens + h_global.unsqueeze(1)     
+
+        reg_tokens = self.register.expand(B, -1, -1)          
+        tokens = torch.cat([gene_tokens, reg_tokens], dim=1)  
+        h = self.ln(tokens)
+        # out, attn_w = self.attn(h, h, h, need_weights=need_w, average_attn_weights=False)
+        # tokens = tokens + out                                 
+
+        # gene_out = tokens[:, :G, :]                           # (B,G,D)
+        # F = gene_out.mean(dim=1)                              # (B,D)
+
+        # if not return_heatmap:
+        #     return F
+        out, _ = self.attn(h, h, h, need_weights=False)
+        tokens = tokens + out                                 
+
+        gene_out = tokens[:, :G, :]                           # (B,G,D)
+        F = gene_out.mean(dim=1)                              # (B,D)
+        # heat = attn_w[:, :, G:G+self.k_register, :G]          # (B,heads,k,G)
+        # heat = heat.mean(dim=1)                               # (B,k,G)
+        # print(F.shape)
+        return F
+
+# class RegisterSNN(nn.Module):
+#     def __init__(self, omic_input_dim: int, model_size_omic="small", k_register: int = 8):
+#         super().__init__()
+#         self.k_register = k_register
+#         self.register = nn.Parameter(torch.randn(1, k_register))
+#         dim_dict = {"small": 4096}
+#         self.base_dim = dim_dict[model_size_omic]
+#         self.in_dim = omic_input_dim + k_register
+#         self.hid_dim = self.base_dim + k_register
+
+#         blocks = [SNN_Block(self.in_dim, self.hid_dim)]
+#         for _ in range(3):
+#             blocks.append(SNN_Block(self.hid_dim, self.hid_dim, dropout=0.25))
+#         self.fc_omic = nn.Sequential(*blocks)
+
+#         self.apply(init_non_llm)
+#         nn.init.normal_(self.register, 0.0, 0.02)
+
+#     def forward(self, x):
+#         # x: (B,G)
+#         if x.dim() == 1:
+#             x = x.unsqueeze(0)
+#         B = x.size(0)
+#         r = self.register.expand(B, -1)      # (B,k)
+#         x = torch.cat([x, r], dim=1)          # (B,G+k)
+#         h = self.fc_omic(x)                   # (B,base+k)
+#         return h[:, :-self.k_register]        # (B,base)
 
 
 class TextEncoder(nn.Module):
