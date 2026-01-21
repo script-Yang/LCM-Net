@@ -5,6 +5,42 @@
 > If you encounter any issues, please open an issue or contact **syang671@connect.hkust-gz.edu.cn**.
 
 
+## Data Preparation
+
+### Preparing the Raw Data
+
+Please refer to the [TCGA portal](https://portal.gdc.cancer.gov/) to download the raw data, including raw whole-slide images (WSIs) and gene expression data.
+
+### Embedding the WSIs
+
+For WSIs, please refer to [CLAM](https://github.com/mahmoodlab/CLAM) and [UNI](https://github.com/mahmoodlab/UNI) for details on how to represent these gigapixel whole-slide images.
+
+The pathology data structure should be organized as follows:
+
+```
+Pathology
+-- BRCA
+---- masks
+---- patches
+---- ptfiles    # vision embeddings
+---- stitches
+```
+
+### Other Files
+
+Gene data (processed tabular-like data):  
+e.g., /vip_media/sicheng/DataShare/tmi_re/Gene_data_parquet/{dataset_name}_data.parquet
+
+Pathology feature files (.pt directory):  
+e.g., /vip_media/sicheng/DataShare/tmi_re/UNI_results/UNI_{dataset_name}/pt_files
+
+Data splits (refer to the implementation in MOTCAT):  
+e.g., /vip_media/sicheng/DataShare/tmi_re/ours/splits/5foldcv
+
+LLaMA-2-7B (HuggingFace format) weights ([official link](https://huggingface.co/meta-llama/Llama-2-7b)):  
+e.g., /vip_media/sicheng/DataShare/Llama-2-7b-hf
+
+
 
 ## Running Experiments
 
