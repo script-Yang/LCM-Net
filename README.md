@@ -26,6 +26,19 @@ Pathology
 ---- stitches
 ```
 
+### Gene Preprocessing Scripts
+
+The data preprocessing scripts are provided under `data_preprocessing/`:
+
+- `data_preprocessing/generate_splits.py`  
+  Generate dataset splits (e.g., 5-fold cross-validation), following the implementation in [MOTCAT](https://github.com/Innse/MOTCat).
+
+- `data_preprocessing/preprocess_gene_survival.py`  
+  Preprocess gene expression and survival information into tabular data.
+
+- `data_preprocessing/convert_h5_to_parquet.py`  
+  Convert raw gene data from `.h5` format to processed parquet files.
+
 ### Other Files
 
 Gene data (processed tabular-like data):  
@@ -34,7 +47,7 @@ e.g., /vip_media/sicheng/DataShare/tmi_re/Gene_data_parquet/{dataset_name}_data.
 Pathology feature files (.pt directory):  
 e.g., /vip_media/sicheng/DataShare/tmi_re/UNI_results/UNI_{dataset_name}/pt_files
 
-Data splits (refer to the implementation in MOTCAT):  
+Data splits (refer to the implementation in [MOTCAT](https://github.com/Innse/MOTCat)):  
 e.g., /vip_media/sicheng/DataShare/tmi_re/ours/splits/5foldcv
 
 LLaMA-2-7B (HuggingFace format) weights ([official link](https://huggingface.co/meta-llama/Llama-2-7b)):  
