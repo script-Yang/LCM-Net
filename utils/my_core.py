@@ -34,21 +34,24 @@ def train_model(datasets: tuple, cur: int, args: Namespace):
         from models.model_attmil import MIL_Attention_FC_surv as attmil
         model_dict = {}
         model = attmil(**model_dict)
-    elif args.model_type == 'porpoise':
-        from models.model_porpoise import PorpoiseAMIL as porpoise
-        model_dict = {}
-        model = porpoise(**model_dict)
     elif args.model_type == 'transmil':
         from models.model_transmil import TransMIL
         model_dict = {}
         model = TransMIL(**model_dict)
     elif args.model_type == 'gla':
-        from models.LCM_net_utils.GLA.model_gla import GLA
+        from models.LCM_net_utils.GLA.model_GLA import GLA
         model = GLA(
             gene_dim=60660,                   
             llama_path="/vip_media/sicheng/DataShare/Llama-2-7b-hf",
         ).cuda()
-
+    elif args.model_type == 'lcmnet':
+        from models.LCM_net_utils.MEI.model_MEI import MEI
+        model = MEI(
+            dim=256,
+            Ng=4,     
+            Np=4,    
+            Nf=2,     
+        )  
 
     model = model.to(device)
     optimizer = get_optim(model, args)
@@ -60,7 +63,7 @@ def train_model(datasets: tuple, cur: int, args: Namespace):
     # if args.early_stopping:
     #     early_stopping = EarlyStopping(warmup=0, patience=10, stop_epoch=20, verbose = True)
     # else:
-    #     early_stopping = None
+    early_stopping = None
 
     print('\nSetup Validation C-Index Monitor...', end=' ')
     monitor_cindex = Monitor_CIndex()
@@ -74,14 +77,9 @@ def train_model(datasets: tuple, cur: int, args: Namespace):
     print("running with {} {}".format(args.model_type, args.mode))
 
     for epoch in range(args.start_epoch, args.max_epochs):
-        if args.mode == 'coattn':
-            print('ok_coattn')
-        else:
-            # c_index_val = 1.0
-            # val_latest = {}
-            train_loop_survival(epoch, model, train_loader, optimizer, args.n_classes, writer, loss_fn, reg_fn, args.lambda_reg, args.gc, args)
-            val_latest, c_index_val, stop = validate_survival(cur, epoch, model, val_loader, args.n_classes, early_stopping, monitor_cindex, writer, loss_fn, reg_fn, args.lambda_reg, args.results_dir, args)
-        
+        train_loop_survival(epoch, model, train_loader, optimizer, args.n_classes, writer, loss_fn, reg_fn, args.lambda_reg, args.gc, args)
+        val_latest, c_index_val, stop = validate_survival(cur, epoch, model, val_loader, args.n_classes, early_stopping, monitor_cindex, writer, loss_fn, reg_fn, args.lambda_reg, args.results_dir, args)
+    
         if c_index_val > max_c_index:
             max_c_index = c_index_val
             epoch_max_c_index = epoch

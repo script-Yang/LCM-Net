@@ -270,74 +270,28 @@ class Generic_MIL_Survival_Dataset(Generic_WSI_Survival_Dataset):
                 if self.mode == 'path':
                     path_features = []
                     for slide_id in slide_ids:
-                        # wsi_path = os.path.join(data_dir, 'pt_files', '{}.pt'.format(slide_id.rstrip('.svs')))
-                        # wsi_bag = torch.load(wsi_path,map_location=torch.device('cpu'))
                         wsi_path = os.path.join(data_dir,slide_id)
                         wsi_bag = torch.load(wsi_path)
                         path_features.append(wsi_bag)
                     path_features = torch.cat(path_features, dim=0)
                     return (path_features, torch.zeros((1,1)), label, event_time, c)
 
-                elif self.mode == 'cluster':
-                    path_features = []
-                    cluster_ids = []
-                    for slide_id in slide_ids:
-                        wsi_path = os.path.join(data_dir,slide_id)
-                        wsi_bag = torch.load(wsi_path)
-                        # wsi_path = os.path.join(data_dir, 'pt_files', '{}.pt'.format(slide_id.rstrip('.svs')))
-                        # wsi_bag = torch.load(wsi_path,map_location=torch.device('cpu'))
-                        path_features.append(wsi_bag)
-                        cluster_ids.extend(self.fname2ids[slide_id[:-4]+'.pt'])
-                    path_features = torch.cat(path_features, dim=0)
-                    cluster_ids = torch.Tensor(cluster_ids)
-                    genomic_features = torch.tensor(self.genomic_features.iloc[idx])
-                    return (path_features, cluster_ids, genomic_features, label, event_time, c)
-
                 elif self.mode == 'omic':
                     genomic_features = torch.tensor(self.genomic_features.iloc[idx])
                     return (torch.zeros((1,1)), genomic_features, label, event_time, c)
 
-                elif self.mode == 'pathomic':
-                    path_features = []
-                    for slide_id in slide_ids:
-                        # wsi_path = os.path.join(data_dir, 'pt_files', '{}.pt'.format(slide_id.rstrip('.svs')))
-                        # wsi_bag = torch.load(wsi_path,map_location=torch.device('cpu'))
-                        wsi_path = os.path.join(data_dir,slide_id)
-                        wsi_bag = torch.load(wsi_path)
-                        path_features.append(wsi_bag)
-                    path_features = torch.cat(path_features, dim=0)
-                    genomic_features = torch.tensor(self.genomic_features.iloc[idx])
-                    return (path_features, genomic_features, label, event_time, c)
-
                 elif self.mode == 'coattn':
                     path_features = []
                     for slide_id in slide_ids:
-                        # wsi_path = os.path.join(data_dir, 'pt_files', '{}.pt'.format(slide_id.rstrip('.svs')))
-                        # wsi_bag = torch.load(wsi_path,map_location=torch.device('cpu'))
                         wsi_path = os.path.join(data_dir,slide_id)
                         wsi_bag = torch.load(wsi_path)
                         path_features.append(wsi_bag)
                     path_features = torch.cat(path_features, dim=0)
 
-                    g_f = torch.tensor(self.genomic_features.iloc[idx].values)
-
-                    # omic1 = torch.tensor(self.genomic_features[self.omic_names[0]].iloc[idx].values)
-                    # omic2 = torch.tensor(self.genomic_features[self.omic_names[1]].iloc[idx].values)
-                    # omic3 = torch.tensor(self.genomic_features[self.omic_names[2]].iloc[idx].values)
-                    # omic4 = torch.tensor(self.genomic_features[self.omic_names[3]].iloc[idx].values)
-                    # omic5 = torch.tensor(self.genomic_features[self.omic_names[4]].iloc[idx].values)
-                    # omic6 = torch.tensor(self.genomic_features[self.omic_names[5]].iloc[idx].values)
-                    #omic1 = omic2 = omic3 = omic4 = omic5 = omic6 = g_f
-                    num_elements = g_f.numel() 
-                    parts = 6
-                    size_each = num_elements // parts
-                    omics = [g_f[i*size_each:(i+1)*size_each] for i in range(parts)]
-                    omic1, omic2, omic3, omic4, omic5, omic6 = omics
-
-                    return (path_features, omic1, omic2, omic3, omic4, omic5, omic6, label, event_time, c)
+                    genomic_features = torch.tensor(self.genomic_features.iloc[idx].values)
+                    return (path_features, genomic_features, label, event_time, c)
                 else:
                     raise NotImplementedError('Mode [%s] not implemented.' % self.mode)
-                ### <--
             else:
                 return slide_ids, label, event_time, c
 

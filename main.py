@@ -8,18 +8,17 @@ import os
 parser = argparse.ArgumentParser(
     description='Configurations for Survival Analysis on TCGA Data.')
 
-
 from dataset.dataset_survival import Generic_MIL_Survival_Dataset
 dataset_name = 'CESC'
 
-parser.add_argument('--model_type', type=str, default='gla', 
-choices=['snn', 'clam_sb', 'clam_mb','deepset','attmil','porpoise','transmil',"gla"]
+parser.add_argument('--model_type', type=str, default='lcmnet', 
+choices=['snn', 'clam_sb', 'clam_mb','deepset','attmil','transmil',"gla", "lcmnet"]
 ,help='Type of model (Default: motcat)')
 
 parser.add_argument('--results_dir',     type=str, default=f'./results/{dataset_name}',
                     help='Results directory (Default: ./results)')
 
-parser.add_argument('--mode', default='omic', type=str, choices=['omic', 'path', 'coattn'],
+parser.add_argument('--mode', default='coattn', type=str, choices=['omic', 'path', 'coattn'],
                     help='Specifies which modalities to use / collate function in dataloader.')
 
 parser.add_argument('--split_dir',       type=str, default='/vip_media/sicheng/DataShare/tmi_re/ours/splits/5foldcv',
@@ -45,10 +44,8 @@ parser.add_argument('--lambda_reg',type=float, default=1e-4,help='L1-Regularizat
 parser.add_argument('--gc',type=int, default=32, help='Gradient Accumulation Step.')
 
 
-
 parser.add_argument('--start_epoch', type=int, default=0, help='start_epoch.')
 parser.add_argument('--max_epochs', type=int, default=20,help='Maximum number of epochs to train (default: 20)')
-
 
 parser.add_argument('--early_stopping', action='store_true', default=False, help='Enable early stopping')
 
@@ -67,7 +64,6 @@ dataset = Generic_MIL_Survival_Dataset(csv_path=f"/vip_media/sicheng/DataShare/t
                                         n_bins=4,
                                         label_col = 'survival_days',
                                         ignore=[])
-
 
 omic_size = 10110
 def main(args):
