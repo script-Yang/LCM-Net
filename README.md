@@ -39,7 +39,7 @@ The data preprocessing scripts are provided under `data_preprocessing/`:
 - `data_preprocessing/convert_h5_to_parquet.py`  
   Convert raw gene data from `.h5` format to processed parquet files.
 
-### Other Files
+### Data Locations for Reproducibility
 
 Gene data (processed tabular-like data):  
 e.g., /vip_media/sicheng/DataShare/tmi_re/Gene_data_parquet/{dataset_name}_data.parquet
