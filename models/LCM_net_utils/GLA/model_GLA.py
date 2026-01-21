@@ -243,7 +243,8 @@ class GLA(nn.Module):
     def forward(self, **kwargs):
         x = kwargs["x_omic"]
         # y = kwargs.get("label", None)
-        y = torch.tensor([0]).cuda()
+        # y = torch.tensor([0]).cuda()
+        y = kwargs.get("cancer_label", torch.tensor([0]).cuda())
         concat = kwargs.get("concat", False)
         return_feat = kwargs.get("return_feat", False)
 
