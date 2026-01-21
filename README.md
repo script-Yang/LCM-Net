@@ -1,5 +1,11 @@
 # LCM-Net
 
+> **Note:** This repository contains the initial public release of the code.  
+> Due to current time constraints, the implementation and documentation may be relatively rough at this stage.  
+> If you encounter any issues, please open an issue or contact **syang671@connect.hkust-gz.edu.cn**.
+
+
+
 ## Running Experiments
 
 
