@@ -50,7 +50,7 @@ e.g., /vip_media/sicheng/DataShare/tmi_re/UNI_results/UNI_{dataset_name}/pt_file
 Data splits (refer to the implementation in [MOTCAT](https://github.com/Innse/MOTCat)):  
 e.g., /vip_media/sicheng/DataShare/tmi_re/ours/splits/5foldcv
 
-LLaMA-2-7B (HuggingFace format) weights ([official link](https://huggingface.co/meta-llama/Llama-2-7b)):  
+LLaMA-2-7B (HuggingFace format) weights ([official link](https://huggingface.co/meta-llama/Llama-2-7b-hf)):  
 e.g., /vip_media/sicheng/DataShare/Llama-2-7b-hf
 
 
