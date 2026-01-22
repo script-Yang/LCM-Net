@@ -87,3 +87,5 @@ The LCM-Net codebase adapts components from
 [GIO](https://github.com/daeveraert/gradient-information-optimization).
 We thank the authors for their excellent work.
 
+I thank [Haipeng Zhou](https://haipengzhou856.github.io/) for his mentorship and for his important contributions to the project, including conceptual discussions and data support.
+
