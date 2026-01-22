@@ -21,7 +21,7 @@ def main():
     # Dummy inputs
     # -------------------------
     B = 1        # batch size
-    C = 256      # feature dimension
+    C = 256      # gene feature dimension
     N = 128      # number of pathology tokens
     Cp = 1024    # raw pathology feature dimension
 
