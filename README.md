@@ -4,6 +4,57 @@
 > Due to current time constraints, the implementation and documentation may be relatively rough at this stage.  
 > If you encounter any issues, please open an issue or contact **syang671@connect.hkust-gz.edu.cn**.
 
+## Quick Start
+
+This quick start demonstrates a minimal forward pass of the MEI module in LCM-Net,
+without requiring full dataset preparation.
+
+```python
+import torch
+import torch.nn as nn
+from models.LCM_net_utils.MEI.model_MEI import MEI
+
+def main():
+    device = "cuda" if torch.cuda.is_available() else "cpu"
+
+    # -------------------------
+    # Dummy inputs
+    # -------------------------
+    B = 1        # batch size
+    C = 256      # feature dimension
+    N = 128      # number of pathology tokens
+    Cp = 1024    # raw pathology feature dimension
+
+    F_gene = torch.randn(B, C, device=device)
+    F_path_raw = torch.randn(N, Cp, device=device)
+
+    # Project pathology features to shared dimension
+    path_proj = nn.Linear(Cp, C).to(device)
+    F_path = path_proj(F_path_raw)   # (N, C)
+
+    # -------------------------
+    # Initialize MEI
+    # -------------------------
+    model = MEI(
+        dim=C,
+        Ng=4,     # gene experts
+        Np=4,     # pathology experts
+        Nf=2,     # fusion experts
+        p_drop=0.1
+    ).to(device)
+
+    # -------------------------
+    # Forward pass
+    # -------------------------
+    model.eval()
+    with torch.no_grad():
+        F_out, _ = model(F_gene, F_path)
+
+    print("Output feature shape:", F_out.shape)  # (1, 256)
+
+if __name__ == "__main__":
+    main()
+```
 
 ## Data Preparation
 
