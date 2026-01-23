@@ -13,7 +13,7 @@
 
 ## Pathology (WSI Feature Extraction)
 
-We follow the standard CLAM/UNI pipeline to extract patch-level visual features from whole-slide
+We follow the standard [CLAM](https://github.com/mahmoodlab/CLAM)/[UNI](https://github.com/mahmoodlab/UNI) pipeline to extract patch-level visual features from whole-slide
 images (WSIs). CLAM is used for WSI preprocessing and patch management, while UNI provides the
 pretrained vision encoder.
 
