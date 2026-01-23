@@ -56,6 +56,11 @@ if __name__ == "__main__":
     main()
 ```
 
+## Installation
+```bash
+pip install -r requirements.txt
+```
+
 ## Data Preparation
 
 ### Preparing the Raw Data
