@@ -130,6 +130,9 @@ CUDA_VISIBLE_DEVICES=1 python main.py --model_type transmil --mode path
 An example on the CESC dataset.
 ![An example](assets/running_example.png)
 
+An example on the LIHC dataset (with PFR).
+![An example](assets/running_example.png)
+
 ## Acknowledgments
 
 The LCM-Net codebase adapts components from
