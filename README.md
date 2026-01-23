@@ -4,6 +4,11 @@
 > Due to current time constraints, the implementation and documentation may be relatively rough at this stage.  
 > If you encounter any issues, please open an issue or contact **syang671@connect.hkust-gz.edu.cn**.
 
+## Installation
+```bash
+pip install -r requirements.txt
+```
+
 ## Quick Start
 
 This quick start demonstrates a minimal forward pass of the MEI module in LCM-Net,
@@ -54,11 +59,6 @@ def main():
 
 if __name__ == "__main__":
     main()
-```
-
-## Installation
-```bash
-pip install -r requirements.txt
 ```
 
 ## Data Preparation
