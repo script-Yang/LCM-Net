@@ -128,10 +128,10 @@ CUDA_VISIBLE_DEVICES=1 python main.py --model_type transmil --mode path
 
 **Running example**  
 An example on the CESC dataset.
-![An example](assets/running_example.png)
+![An example](assets/running_example_wo_pfr.png)
 
 An example on the LIHC dataset (with PFR).
-![An example](assets/running_example.png)
+![An example](assets/running_example_w_pfr.png)
 
 ## Acknowledgments
 
