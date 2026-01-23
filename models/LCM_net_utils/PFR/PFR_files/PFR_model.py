@@ -179,6 +179,17 @@ class PFR(PFR_super):
 
     def kmeans_pytorch(self, X, k, random_state=None):
         N, D = X.shape
+        if k >= N:
+            clusters_dict = {
+                i: {
+                    'centroid': X[i],
+                    'points': [i],
+                    'closest_point_idx': i
+                }
+                for i in range(N)
+            }
+            return X.clone(), clusters_dict
+
         if random_state is not None:
             torch.manual_seed(random_state)
         X_mean = X.mean(0, keepdim=True)
