@@ -1,4 +1,5 @@
 # LCM-Net
+(TMI 2026) LCM-Net: LLM-driven Cross-Modality MoE Feature Fusion Network for Cancer Survival Analysis
 
 > **Note:** This repository contains the **initial** public release of the code.  
 > Due to current time constraints, the implementation and documentation may be relatively rough at this stage.  
