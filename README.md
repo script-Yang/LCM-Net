@@ -149,3 +149,15 @@ We thank the authors for their excellent work.
 
 I thank [Haipeng Zhou](https://haipengzhou856.github.io/) for his mentorship and for his important contributions to the project, including conceptual discussions and data support.
 
+## Citation
+If you find this work useful in your research, please consider citing:
+
+```bibtex
+@article{yang2026lcm,
+  title={LCM-Net: LLM-driven Cross-Modality MoE Feature Fusion Network for Cancer Survival Analysis},
+  author={Yang, Sicheng and Zhou, Haipeng and Yang, Yijun and Wang, Weiming and Chen, Shifu and Yang, Guang and Fu, Huazhu and Zhu, Lei},
+  journal={IEEE Transactions on Medical Imaging},
+  year={2026},
+  publisher={IEEE}
+}
+```
